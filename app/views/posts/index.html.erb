@@ -1,0 +1,23 @@
+<%= render '/shared/navbar' %>
+<div class="container" style="margin-top: 40px">
+  <% @posts.each do |post| %>
+    <div class="card shadow">
+      <div class="card-header">
+        <b>Post by:</b> <%= post.user.email %>
+        <span class="badge rounded-pill text-bg-dark mx-1"><%= post.genre.humanize %></span>
+        <div class="dropdown" style="display: inline-block; float: right">
+          <button class="btn btn-warning btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Options
+          </button>
+          <ul class="dropdown-menu">
+            <li><%= link_to 'Destroy', post_path(post), method: :delete, class: 'dropdown-item', data: { confirm: 'Are you sure?' } %></li>
+            <li><%= link_to 'Edit Post', edit_post_path(post), class: 'dropdown-item', data: { confirm: 'Are you sure?' } %></li>
+          </ul>
+        </div>
+      </div>
+      <div><%= image_tag post.image.url, class: "mx-auto d-block w-25 p-3" if post.image? %></div>
+      <div class="py-4 px-4"><b>Content:</b> <%= post.content %></div>
+    </div>
+    <br>
+  <% end %>
+</div>
