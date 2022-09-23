@@ -1,0 +1,69 @@
+<%= render '/shared/navbar' %>
+<div class="container" style="margin-top: 50px">
+  <h6>Me: <%= current_user.email %></h6>
+  <div style="margin-top: 20px; margin-bottom: 25px">
+    <%= link_to "User List", friendships_path(friendship: 'user_list'), class: "link-dark text-decoration-none mx-2", style: "#{'background-color :#10ccf4; font-weight: bolder; border-radius: 20px; padding: 10px;' if params[:friendship] == 'user_list' || params[:friendship].blank?}" %>
+    <%= link_to "Friend List", friendships_path(friendship: 'friend_list'), class: "link-dark text-decoration-none mx-2", style: "#{'background-color :#10ccf4; font-weight: bolder; border-radius: 20px; padding: 10px;' if params[:friendship] == 'friend_list'}" %>
+    <%= link_to "Friend Request", friendships_path(friendship: 'friend_request'), class: "link-dark text-decoration-none mx-2", style: "#{'background-color :#10ccf4; font-weight: bolder; border-radius: 20px; padding: 10px;' if params[:friendship] == 'friend_request'}" %>
+    <% if params[:friendship] == 'user_list' || params[:friendship].blank? %>
+      <div class="d-inline-block" style="float: right">
+        <%= form_tag({ url: friendships_path }, { method: :get }) do %>
+          <div class="input-group">
+            <%= hidden_field_tag :friendship, params[:friendship] %>
+            <%= text_field_tag :email, params[:email], class: "form-control", placeholder: 'Email' %>
+            <%= submit_tag :Search, class: "btn btn-warning" %>
+            <%= link_to 'Reset', friendships_path(friendship: params[:friendship]), class: 'btn btn-info' %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  <table class="table-primary table table-hover table-striped text-center fs-6 mx-auto">
+    <thead class="table-active">
+    <tr>
+      <th scope="col">Email</th>
+      <% if ['friend_request', 'friend_list'].include? params[:friendship] %>
+        <th scope="col">State</th>
+      <% end %>
+      <th scope="col">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @users&.each do |user| %>
+      <tr>
+        <td><%= user.email %></td>
+        <td>
+          <%= link_to "Add Friend", friendships_path(friend_id: user), data: { confirm: 'Are you sure?' }, method: :post, class: 'btn btn-success' %>
+        </td>
+      </tr>
+    <% end %>
+    <% @friends&.each do |friend| %>
+      <tr>
+        <td>
+          <%= friend.friend.email if current_user == friend.user %>
+          <%= friend.user.email if current_user == friend.friend %>
+        </td>
+        <td>
+          <%= friend.state %>
+        </td>
+        <td>
+          <%= link_to 'Unfriend', friendship_path(friend), data: { confirm: 'Are you sure?' }, method: :delete, class: 'btn btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+    <% @friend_requests&.each do |friend_request| %>
+      <tr>
+        <td>
+          <%= friend_request.friend.email if current_user == friend_request.user %>
+          <%= friend_request.user.email if current_user == friend_request.friend %>
+        </td>
+        <td> <%= friend_request.state %></td>
+        <td>
+          <%= link_to 'Accept', friendship_accept_path(friend_request), data: { confirm: 'Are you sure?' }, class: 'btn btn-success', method: :put if friend_request.may_accept? %>
+          <%= link_to 'Ignore', friendship_cancel_path(friend_request), data: { confirm: 'Are you sure?' }, class: 'btn btn-danger', method: :put if friend_request.may_cancel? %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

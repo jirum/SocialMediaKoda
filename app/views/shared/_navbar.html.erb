@@ -1,7 +1,27 @@
-<nav class="navbar navbar-expand-lg" style="background-color: #e3f2fd; height: 50px">
+<nav class="navbar fixed-top" style="background-color: #e3f2fd; height: 50px">
   <div class="container-fluid">
-    <%= link_to 'Project', posts_path, class:'text-decoration-none text-dark' %>
-    <%= link_to 'Add Post', new_post_path, class: "nav-link text-black ms-auto px-2", data: { confirm: 'Are you sure?' } %>
-    <%= link_to 'Sign out', destroy_user_session_path, method: :delete, class: "nav-link text-black px-2" %>
+    <%= link_to 'Project', posts_path, class:'navbar-brand' %>
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+          <li class="nav-item">
+            <%= link_to 'Add Post', new_post_path, class: "text-decoration-none text-dark", data: { confirm: 'Are you sure?' } %>
+          </li>
+          <li class="nav-item mt-3">
+            <%= link_to 'Add someone', friendships_path, class: "text-decoration-none text-dark" %>
+          </li>
+          <li class="nav-item mt-3">
+            <%= link_to 'Sign out', destroy_user_session_path, method: :delete, class: "text-decoration-none text-dark", data: { confirm: 'Are you sure?' } %>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </nav>

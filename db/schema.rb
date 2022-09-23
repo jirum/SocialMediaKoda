@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_15_074544) do
+ActiveRecord::Schema.define(version: 2022_09_19_020815) do
+
+  create_table "friendships", charset: "utf8mb4", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "friend_id"
+    t.string "state"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["friend_id"], name: "index_friendships_on_friend_id"
+    t.index ["user_id"], name: "index_friendships_on_user_id"
+  end
 
   create_table "posts", charset: "utf8mb4", force: :cascade do |t|
     t.string "title"
