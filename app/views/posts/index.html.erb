@@ -1,5 +1,8 @@
 <%= render '/shared/navbar' %>
-<div class="container" style="margin-top: 40px">
+<div class="container w-50" style="margin-top: 70px">
+  <div class="card shadow bg-light mb-3 py-3 px-3">
+    <div><b>Hello:</b> <%= current_user.email %></div>
+  </div>
   <% @posts.each do |post| %>
     <div class="card shadow">
       <div class="card-header">
@@ -15,7 +18,9 @@
           </ul>
         </div>
       </div>
-      <div><%= image_tag post.image.url, class: "mx-auto d-block w-25 p-3" if post.image? %></div>
+      <div class="overflow-hidden" style="max-height: 400px; height:20vw; min-height: 130px">
+        <%= image_tag post.image.url, class: 'card-img-top img-responsive' if post.image? %>
+      </div>
       <div class="py-4 px-4"><b>Content:</b> <%= post.content %></div>
     </div>
     <br>
