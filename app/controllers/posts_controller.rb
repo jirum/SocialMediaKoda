@@ -4,7 +4,11 @@ class PostsController < ApplicationController
   after_action :verify_authorized, only: [:edit, :update, :destroy]
 
   def index
-    @posts = Post.includes(:user)
+    friend_ids = current_user.friendships.accepted.pluck(:friend_id) + current_user.inverse_friendships.accepted.pluck(:user_id)
+    friends_post = Post.where(user_id: friend_ids).where.not(genre: :private_post)
+    user_post = current_user.posts
+    public_posts = Post.public_post
+    @post_in_index = Post.where(id: friends_post + user_post + public_posts).includes(:user)
   end
 
   def new

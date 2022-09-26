@@ -3,7 +3,7 @@
   <div class="card shadow bg-light mb-3 py-3 px-3">
     <div><b>Hello:</b> <%= current_user.email %></div>
   </div>
-  <% @posts.each do |post| %>
+  <% @post_in_index.each do |post| %>
     <div class="card shadow">
       <div class="card-header">
         <b>Post by:</b> <%= post.user.email %>
