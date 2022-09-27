@@ -2,13 +2,10 @@ class PostsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_post, only: [:edit, :update, :destroy]
   after_action :verify_authorized, only: [:edit, :update, :destroy]
+  include ApplicationHelper
 
   def index
-    friend_ids = current_user.friendships.accepted.pluck(:friend_id) + current_user.inverse_friendships.accepted.pluck(:user_id)
-    friends_post = Post.where(user_id: friend_ids).where.not(genre: :private_post)
-    user_post = current_user.posts
-    public_posts = Post.public_post
-    @post_in_index = Post.where(id: friends_post + user_post + public_posts).includes(:user)
+    @post_in_index = Post.where(id: all_posts(current_user)).includes(:user)
   end
 
   def new

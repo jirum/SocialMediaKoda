@@ -1,0 +1,46 @@
+<%= render '/shared/navbar' %>
+<div class="container w-50" style="margin-top: 70px">
+  <div class="card shadow">
+    <div class="card-header">
+      <b>Post by:</b> <%= @post.user.email %>
+      <span class="badge rounded-pill text-bg-dark mx-1"><%= @post.genre.humanize %></span>
+      <div class="dropdown" style="display: inline-block; float: right">
+        <button class="btn btn-warning btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Options
+        </button>
+        <ul class="dropdown-menu">
+          <li><%= link_to 'Destroy', post_path(@post), method: :delete, class: 'dropdown-item', data: { confirm: 'Are you sure?' } %></li>
+          <li><%= link_to 'Edit Post', edit_post_path(@post), class: 'dropdown-item', data: { confirm: 'Are you sure?' } %></li>
+        </ul>
+      </div>
+    </div>
+    <div class="card-body p-0">
+      <div class="overflow-hidden" style="max-height: 400px; height:20vw; min-height: 130px">
+        <%= image_tag @post.image.url, class:'w-100' if @post.image? %>
+      </div>
+    </div>
+    <div class="py-4 px-4"><b>Content:</b> <%= @post.content %></div>
+    <ul class="list-group list-group-flush px-2 py-2">
+      <%= link_to new_post_comment_path, class: 'text-decoration-none text-dark' do %>
+        <i class="fas fa-comment-dots"> Write a comment...</i>
+      <% end %>
+    </ul>
+    <div class="card-footer">
+      <% @comments.each do |comment| %>
+        <div class="card mt-3 py-2 px-2">
+          <div>
+            <%= comment.user.email %>
+            <div class="dropdown px-2" style="display: inline-block; float: right">
+              <i class="fa-solid fa-ellipsis" data-bs-toggle="dropdown" aria-expanded="false"></i>
+              <ul class="dropdown-menu">
+                <li><%= link_to 'Destroy', post_comment_path(@post, comment), method: :delete, class: 'dropdown-item', data: { confirm: 'Are you sure?' } %></li>
+                <li><%= link_to 'Edit Comment', edit_post_comment_path(@post, comment), class: 'dropdown-item' %></li>
+              </ul>
+            </div>
+          </div>
+          <div><%= comment.content %></div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
