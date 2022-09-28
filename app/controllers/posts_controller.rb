@@ -13,8 +13,18 @@ class PostsController < ApplicationController
   end
 
   def create
-    @post = Post.new(post_params)
-    @post.user = current_user
+    begin
+      @post = Post.new(post_params)
+      @post.user = current_user
+      if params[:display_location] == '1'
+        service = IpGeolocationService.new
+        location = service.get_location(RestClient.get('https://icanhazip.com/'))
+        @post.country = location['country_name']
+        @post.city = location['city']
+      end
+    rescue
+      flash[:alert] = "You created a post but don't have location"
+    end
     if @post.save
       flash[:notice] = "Successfully Created"
       redirect_to posts_path
@@ -25,12 +35,26 @@ class PostsController < ApplicationController
   end
 
   def edit
-    authorize @post,:edit?, policy_class: PostPolicy
+    authorize @post, :edit?, policy_class: PostPolicy
   end
 
   def update
-    authorize @post,:update?, policy_class: PostPolicy
-    if @post.update(post_params)
+    @post.assign_attributes(post_params)
+    begin
+      if params[:display_location] == '1'
+        service = IpGeolocationService.new
+        location = service.get_location(RestClient.get('https://icanhazip.com/'))
+        @post.country = location['country_name']
+        @post.city = location['city']
+      else
+        @post.country = nil
+        @post.city = nil
+      end
+    rescue
+      flash[:alert] = "You updated a post but don't have location"
+    end
+    authorize @post, :update?, policy_class: PostPolicy
+    if @post.save
       flash[:notice] = "Successfully Updated"
       redirect_to posts_path
     else
@@ -40,7 +64,7 @@ class PostsController < ApplicationController
   end
 
   def destroy
-    authorize @post,:destroy?, policy_class: PostPolicy
+    authorize @post, :destroy?, policy_class: PostPolicy
     if @post.destroy
       flash[:notice] = "Successfully Deleted"
       redirect_to posts_path
