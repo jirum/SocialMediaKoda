@@ -1,0 +1,60 @@
+<%= render '/shared/navbar' %>
+<div class="container w-50" style="margin-top: 70px">
+  <div class="card shadow mb-3 bg-light">
+    <div class="overflow-hidden" style="max-height: 400px; height:20vw; min-height: 130px">
+      <%= image_tag @group.banner.url, class: 'w-100' if @group.banner? %>
+    </div>
+    <div class="py-2 px-3"><b>Name: </b><%= @group.name %>
+      <span class="badge rounded-pill text-bg-dark mx-2"><%= @group.genre.humanize %></span>
+      <div class="dropdown px-2" style="display: inline-block; float: right">
+        <i class="fa-solid fa-ellipsis" data-bs-toggle="dropdown" aria-expanded="false"></i>
+        <ul class="dropdown-menu">
+          <li><%= link_to 'Pending Request', group_path(group: 'request'), class: 'dropdown-item' if current_user.join_groups.find_by(group: @group)&.admin? || current_user.join_groups.find_by(group: @group)&.moderator? %></li>
+          <li><%= link_to 'Members', group_path(group: 'members'), class: 'dropdown-item' %></li>
+        </ul>
+      </div>
+    </div>
+    <div class="py-2 px-3"><b>Description: </b><%= @group.description %></div>
+  </div>
+  <% @requests&.each do |request| %>
+    <div class="card shadow py-3 px-3 w-100" style="display: inline-block;">
+      <h5 style="display: inline-block"><%= request.user.email %></h5>
+      <div style="float: right;"><%= link_to 'Ignore', join_group_ignore_path(group_id: @group, join_group_id: request), data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm me-auto mt-1', method: :put if request.may_ignore? && policy(request).ignore? %></div>
+      <div style="float: right; margin-right: 10px"><%= link_to 'Accept', join_group_accept_path(group_id: @group, join_group_id: request), data: { confirm: 'Are you sure?' }, class: 'btn btn-success btn-sm me-auto mt-1', method: :put if request.may_accept? && policy(request).accept? %></div>
+    </div>
+  <% end %>
+
+  <% if params[:group] == 'members' %>
+    <table class="table table-striped text-center fs-6" style="background-color: #e3f2fd;">
+      <thead class="table-active">
+      <tr>
+        <th colspan="14">Member List</th>
+      </tr>
+      <tr>
+        <th scope="col">Email</th>
+        <th scope="col">Role</th>
+        <th scope="col">Action</th>
+        <th scope="col">Change Role</th>
+      </tr>
+      </thead>
+      <tbody>
+
+      <% @members&.each do |member| %>
+        <tr>
+          <td><%= member.user.email %></td>
+          <td><%= member.role %></td>
+          <td><%= link_to 'Remove', join_group_remove_path(group_id: @group, join_group_id: member), data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm me-auto mt-1', method: :put if member.may_remove? && policy(member).remove? %></td>
+          <td>
+            <% if policy(member).update? %>
+              <%= form_for member, url: join_group_path(group_id: @group, join_group_id: member), method: :patch do |f| %>
+                <%= f.select :role, JoinGroup.roles.keys.map { |key| [key.humanize, key] }, { placeholder: 'Please Select Role' }, { class: 'form-select' } %>
+                <%= f.submit "Assign Role", class: 'text-light btn form-control mt-3', style: 'background-color: #000033' %>
+              <% end %>
+              </td>
+              </tr>
+            <% end %>
+      <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>

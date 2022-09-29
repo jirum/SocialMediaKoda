@@ -1,0 +1,9 @@
+<%= render '/shared/navbar' %>
+<div class="card w-50 bg-light" style="margin: 0 auto; float: none; margin-top: 70px;">
+  <div class="card-body">
+    <%= link_to 'Back', groups_path, class: 'btn btn-outline-info btn-sm' %>
+    <%= form_for @group, url: group_path(@group), method: :patch do |f| %>
+      <%= render partial: 'form', locals: { f: f, group: @group } %>
+    <% end %>
+  </div>
+</div>

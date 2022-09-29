@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_27_083256) do
+ActiveRecord::Schema.define(version: 2022_09_28_074103) do
 
   create_table "comments", charset: "utf8mb4", force: :cascade do |t|
     t.string "content"
@@ -30,6 +30,29 @@ ActiveRecord::Schema.define(version: 2022_09_27_083256) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["friend_id"], name: "index_friendships_on_friend_id"
     t.index ["user_id"], name: "index_friendships_on_user_id"
+  end
+
+  create_table "groups", charset: "utf8mb4", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.string "banner"
+    t.integer "genre"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_groups_on_user_id"
+  end
+
+  create_table "join_groups", charset: "utf8mb4", force: :cascade do |t|
+    t.string "state"
+    t.boolean "is_owner", default: false
+    t.integer "role"
+    t.bigint "user_id"
+    t.bigint "group_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["group_id"], name: "index_join_groups_on_group_id"
+    t.index ["user_id"], name: "index_join_groups_on_user_id"
   end
 
   create_table "posts", charset: "utf8mb4", force: :cascade do |t|

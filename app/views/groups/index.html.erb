@@ -1,0 +1,62 @@
+<%= render '/shared/navbar' %>
+<div class="container w-50" style="margin-top: 70px">
+  <div class="card shadow py-3 px-3 w-100 mb-3 bg-light" style="display: inline-block; float: right">
+    <h3 style="display: inline-block;">Group List</h3>
+    <div style="float: right;"><%= link_to 'Create Group', new_group_path, class: 'btn btn-success btn-sm me-auto mt-1' %></div>
+  </div>
+  <div class="py-3" style="text-align: center;">
+    <%= link_to 'All Group', groups_path(group: 'group_list'), class: 'btn btn-success' %>
+    <%= link_to 'Joined Group', groups_path(group: 'joined_group'), class: 'btn btn-success' %>
+    <%= link_to 'Manage Group', groups_path(group: 'own_group'), class: 'btn btn-success' %>
+  </div>
+  <% @groups&.each do |group| %>
+    <div class="card shadow mb-3 bg-light">
+      <div class="card-header py-3 px-3" style="display: inline-block;">
+        <b>Name: </b><%= group.name %>
+        <span class="badge rounded-pill text-bg-dark mx-1"><%= group.genre.humanize %></span>
+        <%= link_to '', group_path(group), method: :delete, class: 'fa-solid fa-trash text-dark text-decoration-none px-2 mt-1', style: 'float: right', data: { confirm: 'Are you sure?' } if policy(group).destroy? %>
+        <%= link_to '', edit_group_path(group), class: 'fa-solid fa-pen-to-square text-dark text-decoration-none px-2 mt-1', style: 'float: right' if policy(group).update? %>
+        <%= link_to '', group_path(group), class: 'fa-solid fa-eye text-dark text-decoration-none px-2 mt-1', style: 'float: right' %>
+        <%= link_to '', join_groups_path(group_id: group), data: { confirm: 'Are you sure?' }, method: :post, class: 'fa-solid fa-door-open text-dark px-2 mt-1', style: 'float: right' %>
+      </div>
+      <div class="overflow-hidden" style="max-height: 400px; height:20vw; min-height: 130px">
+        <%= image_tag group.banner.url, class: 'w-100' if group.banner? %>
+      </div>
+      <div class="py-3 px-3"><b>Description: </b><%= group.description %>
+      </div>
+    </div>
+  <% end %>
+  <% @own_group&.each do |group| %>
+    <div class="card shadow mb-3 bg-light">
+      <div class="card-header py-3 px-3" style="display: inline-block;">
+        <b>Name: </b><%= group.name %>
+        <span class="badge rounded-pill text-bg-dark mx-1"><%= group.genre.humanize %></span>
+        <%= link_to '', group_path(group), method: :delete, class: 'fa-solid fa-trash text-dark text-decoration-none px-2 mt-1', style: 'float: right', data: { confirm: 'Are you sure?' } if policy(group).destroy? %>
+        <%= link_to '', edit_group_path(group), class: 'fa-solid fa-pen-to-square text-dark text-decoration-none px-2 mt-1', style: 'float: right' if policy(group).update? %>
+        <%= link_to '', group_path(group), class: 'fa-solid fa-eye text-dark text-decoration-none px-2 mt-1', style: 'float: right' %>
+      </div>
+      <div class="overflow-hidden" style="max-height: 400px; height:20vw; min-height: 130px">
+        <%= image_tag group.banner.url, class: 'w-100' if group.banner? %>
+      </div>
+      <div class="py-3 px-3"><b>Description: </b><%= group.description %>
+      </div>
+    </div>
+  <% end %>
+  <% @joined_groups&.each do |joined_group| %>
+    <div class="card shadow mb-3 bg-light">
+      <div class="card-header py-3 px-3" style="display: inline-block;">
+        <b>Name: </b><%= joined_group.group.name %>
+        <span class="badge rounded-pill text-bg-dark mx-1"><%= joined_group.group.genre.humanize %></span>
+        <%= link_to '', group_path(joined_group), method: :delete, class: 'fa-solid fa-trash text-dark text-decoration-none px-2 mt-1', style: 'float: right', data: { confirm: 'Are you sure?' } if policy(joined_group).destroy? %>
+        <%= link_to '', edit_group_path(joined_group.group), class: 'fa-solid fa-pen-to-square text-dark text-decoration-none px-2 mt-1', style: 'float: right' if policy(joined_group).update? %>
+        <%= link_to '', group_path(joined_group.group), class: 'fa-solid fa-eye text-dark text-decoration-none px-2 mt-1', style: 'float: right' %>
+        <%= link_to '', join_group_leave_path(joined_group, @group), data: { confirm: 'Are you sure you want to leave?' }, class: 'fa-solid fa-person-through-window px-2 mt-1 text-dark text-decoration-none', style: 'float: right', method: :put if joined_group.may_leave? %>
+      </div>
+      <div class="overflow-hidden" style="max-height: 400px; height:20vw; min-height: 130px">
+        <%= image_tag joined_group.group.banner.url, class: 'w-100' if joined_group.group.banner? %>
+      </div>
+      <div class="py-3 px-3"><b>Description: </b><%= joined_group.group.description %>
+      </div>
+    </div>
+  <% end %>
+</div>

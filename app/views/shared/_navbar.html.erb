@@ -12,13 +12,16 @@
       <div class="offcanvas-body">
         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
           <li class="nav-item">
-            <%= link_to 'Add Post', new_post_path, class: "text-decoration-none text-dark", data: { confirm: 'Are you sure?' } %>
+            <i class="fa-solid fa-pen-nib"></i>&nbsp;<%= link_to 'Add Post', new_post_path, class: "text-decoration-none text-dark", data: { confirm: 'Are you sure?' } %>
           </li>
           <li class="nav-item mt-3">
-            <%= link_to 'Add someone', friendships_path, class: "text-decoration-none text-dark" %>
+            <i class="fa-solid fa-user-plus"></i>&nbsp;<%= link_to 'Add Friend', friendships_path, class: "text-decoration-none text-dark" %>
           </li>
           <li class="nav-item mt-3">
-            <%= link_to 'Sign out', destroy_user_session_path, method: :delete, class: "text-decoration-none text-dark", data: { confirm: 'Are you sure?' } %>
+            <i class="fa-solid fa-people-group"></i>&nbsp;<%= link_to 'Create Group', groups_path, class: "text-decoration-none text-dark" %>
+          </li>
+          <li class="nav-item mt-3">
+            <i class="fa-solid fa-right-from-bracket"></i>&nbsp;<%= link_to 'Sign Out', destroy_user_session_path, method: :delete, class: "text-decoration-none text-dark", data: { confirm: 'Are you sure?' } %>
           </li>
         </ul>
       </div>
