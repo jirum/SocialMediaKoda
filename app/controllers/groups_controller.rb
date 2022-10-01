@@ -7,6 +7,8 @@ class GroupsController < ApplicationController
     @groups = Group.where.not(id: group_ids).order(id: :desc) if params[:group] == 'group_list' || params[:group].blank?
     @own_group = Group.where(user_id: current_user) if params[:group] == 'own_group'
     @joined_groups = current_user.join_groups.accepted.where.not(is_owner: true).includes(:group) if params[:group] == 'joined_group'
+
+    @groups = @groups.where(name: params[:name]) if (params[:group] == 'group_list' || params[:group].blank?) && params[:name].present?
   end
 
   def new

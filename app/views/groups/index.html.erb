@@ -1,8 +1,19 @@
 <%= render '/shared/navbar' %>
-<div class="container w-50" style="margin-top: 70px">
-  <div class="card shadow py-3 px-3 w-100 mb-3 bg-light" style="display: inline-block; float: right">
+<div class="container w-50" style="margin-top: 70px;">
+  <div class="card shadow py-3 px-3 w-100 mb-3 bg-light" style="display: inline-block">
     <h3 style="display: inline-block;">Group List</h3>
-    <div style="float: right;"><%= link_to 'Create Group', new_group_path, class: 'btn btn-success btn-sm me-auto mt-1' %></div>
+    <%= link_to 'Create Group', new_group_path, class: 'btn btn-success', style: 'float: right' %>
+    <% if params[:group] == 'group_list' || params[:group].blank? %>
+      <div style="display: inline-block;  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+        <%= form_tag({ url: groups_path }, { method: :get }) do %>
+          <div class="input-group">
+            <%= text_field_tag :name, params[:name], placeholder: 'Name', class: 'form-control' %>
+            <%= submit_tag :Search, class: "btn btn-warning" %>
+            <%= link_to 'Reset', groups_path(group: params[:group]), class: 'btn btn-info' %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
   </div>
   <div class="py-3" style="text-align: center;">
     <%= link_to 'All Group', groups_path(group: 'group_list'), class: 'btn btn-success' %>

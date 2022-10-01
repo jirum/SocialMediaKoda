@@ -6,6 +6,7 @@ class PostsController < ApplicationController
 
   def index
     @post_in_index = Post.where(id: all_posts(current_user)).includes(:user)
+    @post_in_index = @post_in_index.where(title: params[:title]) if params[:title].present?
   end
 
   def new
