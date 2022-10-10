@@ -14,6 +14,7 @@ class FriendshipsController < ApplicationController
   def create
     if cancelled_friend = current_user.friendships.cancelled.find_by(friend_id: params[:friend_id])
       cancelled_friend.resend!
+      flash[:notice] = "Successfully Resend Request"
     elsif current_user.inverse_friendships.where.not(state: :cancelled).find_by(user_id: params[:friend_id]).nil? && current_user.friendships.find_by(friend_id: params[:friend_id]).nil? && current_user.id != params[:friend_id].to_i
       friendship = current_user.friendships.new(friend_id: params[:friend_id])
       friendship.save

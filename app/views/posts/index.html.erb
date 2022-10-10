@@ -1,5 +1,6 @@
 <%= render '/shared/navbar' %>
 <div class="container w-50" style="margin-top: 70px">
+  <%= render "errors/flash_error" %>
   <div class="card shadow bg-light w-100 mb-3 py-3 px-3" style="display: inline-block">
     <div style="display: inline-block"><b>Hello:</b> <%= current_user.email %></div>
     <div style="float: right; display: inline-block; width: 40%">

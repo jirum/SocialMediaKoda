@@ -12,5 +12,12 @@
 </head>
 <body>
 <%= yield %>
+<script>
+    const errors = document.querySelector(".notice");
+    var is_present = <%= flash.present? %>;
+    if (is_present) {
+        setTimeout(() => errors.remove(), 1000);
+    }
+</script>
 </body>
 </html>

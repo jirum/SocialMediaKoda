@@ -1,5 +1,6 @@
 <%= render '/shared/navbar' %>
 <div class="container w-50" style="margin-top: 70px">
+  <%= render 'errors/flash_error' %>
   <div class="card shadow">
     <div class="card-header">
       <b>Post by:</b> <%= @post.user.email %>
